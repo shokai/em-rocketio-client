@@ -62,6 +62,8 @@ start [chat server](https://github.com/shokai/rocketio-chat-sample)
 sample chat client
 
     % ruby sample/cui_chat_client.rb
+    % ruby sample/cui_chat_client.rb http://localhost:5000 comet
+    % ruby sample/cui_chat_client.rb http://localhost:5000 websocket
 
 
 Test

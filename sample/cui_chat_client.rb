@@ -4,9 +4,11 @@ require 'rubygems'
 require 'em-rocketio-client'
 
 name = `whoami`.strip || 'shokai'
+url = ARGV.shift || 'http://localhost:5000'
+type = ARGV.shift || :websocket
 
 EM::run do
-  io = EM::RocketIO::Client.new('http://localhost:5000').connect
+  io = EM::RocketIO::Client.new(url, :type => type).connect
   # io = EM::RocketIO::Client.new('http://localhost:5000', :type => :comet).connect
 
   puts "waiting #{io.url}"
