@@ -7,32 +7,50 @@ module EventMachine
       include EventEmitter
       attr_reader :settings, :type, :io
 
+      public
       def initialize(url, opt={:type => :websocket})
-        http = EM::HttpRequest.new("#{url}/rocketio/settings").get
+        @url = url
+        @type = opt[:type].to_sym
+        @settings = nil
+        @io = nil
+        @ws_close_timer = nil
+        get_settings
+        self
+      end
+
+      private
+      def get_settings
+        url = "#{@url}/rocketio/settings"
+        http = EM::HttpRequest.new(url).get
         http.callback do |res|
           begin
             @settings = JSON.parse res.response
             emit :__settings
           rescue => e
-            emit :error, e
+            emit :error, "#{e} (#{url})"
+            EM::add_timer 10 do
+              get_settings
+            end
           end
         end
-        http.errback do |err|
-          emit :error, err
+        http.errback do |e|
+          if e.error == Errno::ECONNREFUSED
+            emit :error, "connection refused (#{url})"
+          else
+            emit :error, "#{err.error} (#{url})"
+          end
+          EM::add_timer 10 do
+            get_settings
+          end
         end
-        @settings = nil
-        @type = opt[:type].to_sym
-        @io = nil
-        @ws_close_timer = nil
-        self
       end
 
+      public
       def connect
         this = self
         once :__settings do
           if @type == :websocket and @settings.include? 'websocket'
             @io = EM::WebSocketIO::Client.new(@settings['websocket']).connect
-            @type = :websocket
           elsif @type == :comet or @settings.include? 'comet'
             @io = EM::CometIO::Client.new(@settings['comet']).connect
             @type = :comet
