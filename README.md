@@ -1,26 +1,82 @@
-# Em::Rocketio::Client
+em-rocketio-client
+==================
+[Sinatra RocketIO](https://github.com/shokai/sinatra-rocketio) Client for eventmachine
 
-TODO: Write a gem description
+* https://github.com/shokai/em-rocketio-client
 
-## Installation
+Installation
+------------
 
-Add this line to your application's Gemfile:
+    % gem install em-rocketio-client
 
-    gem 'em-rocketio-client'
 
-And then execute:
+Usage
+-----
 
-    $ bundle
+```ruby
+require 'eventmachine'
+require 'em-rocketio-client'
 
-Or install it yourself as:
+EM::run do
+  io = EM::RocketIO::Client.new('http://localhost:5000').connect
+  # io = EM::RocketIO::Client.new('http://localhost:5000', :type => :comet).connect
 
-    $ gem install em-rocketio-client
+  io.on :connect do |session|
+    puts "#{io.type} connect!! (sessin_id:#{session})"
+  end
 
-## Usage
+  io.on :disconnect do
+    puts "#{io.type} disconnect"
+  end
 
-TODO: Write usage instructions here
+  io.on :error do |err|
+    STDERR.puts err
+  end
 
-## Contributing
+  ## regist receive "chat" event
+  io.on :chat do |data|
+    puts "#{data['name']} - #{data['message']}"
+  end
+
+  ## push "chat" event to Server
+  EM::add_periodic_timer 10 do
+    io.push :chat, {:message => Time.now.to_s, :name => 'clock'}
+  end
+end
+```
+
+
+Sample
+------
+
+start [chat server](https://github.com/shokai/rocketio-chat-sample)
+
+    % git clone git://github.com/shokai/rocketio-chat-sample.git
+    % cd rocketio-chat-sample
+    % bundle install
+    % foreman start
+
+=> http://localhost:5000
+
+
+sample chat client
+
+    % ruby sample/cui_chat_client.rb
+
+
+Test
+----
+
+    % gem install bundler
+    % bundle install
+    % export PORT=5000
+    % export WS_PORT=8080
+    % export PID_FILE=/tmp/em-rocketio-client-testapp.pid
+    % rake test
+
+
+Contributing
+------------
 
 1. Fork it
 2. Create your feature branch (`git checkout -b my-new-feature`)
