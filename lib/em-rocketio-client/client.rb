@@ -9,27 +9,37 @@ module EventMachine
 
       def initialize(url, opt={:type => :websocket})
         @settings = JSON.parse HTTParty.get("#{url}/rocketio/settings").body
-        type = opt[:type].to_sym
-        if type == :websocket and @settings.include? 'websocket'
-          @type = :websocket
-          @io = EM::WebSocketIO::Client.new @settings['websocket']
-        elsif type == :comet or @settings.include? 'comet'
-          @type = :comet
-          @io = EM::CometIO::Client.new @settings['comet']
-        else
-          raise Error, "cannot find #{type} IO #{url}"
-        end
-        this = self
-        if @io
-          @io.on :* do |event_name, *args|
-            this.emit event_name, *args
-          end
-        end
-        self
+        @type = opt[:type].to_sym
+        @io = nil
+        @ws_close_timer = nil
       end
 
       def connect
-        @io.connect
+        this = self
+        if @type == :websocket and @settings.include? 'websocket'
+          @io = EM::WebSocketIO::Client.new(@settings['websocket']).connect
+          @type = :websocket
+        elsif @type == :comet or @settings.include? 'comet'
+          @io = EM::CometIO::Client.new(@settings['comet']).connect
+          @type = :comet
+        else
+          raise Error, "cannnot found #{@type} IO"
+        end
+        @io.on :* do |event_name, *args|
+          this.emit event_name, *args
+        end
+        if @type == :websocket
+          @ws_close_timer = EM::add_timer 3 do
+            close
+            emit :error, "websocket port is not open"
+            @type = :comet
+            connect
+          end
+          once :connect do
+            EM::cancel_timer @ws_close_timer if @ws_close_timer
+            @ws_close_timer = nil
+          end
+        end
         self
       end
 
