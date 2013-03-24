@@ -26,6 +26,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "em-cometio-client"
   spec.add_dependency "em-websocketio-client"
+  spec.add_dependency "em-http-request"
   spec.add_dependency "eventmachine"
   spec.add_dependency "event_emitter"
 end

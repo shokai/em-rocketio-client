@@ -11,8 +11,6 @@ EM::run do
   io = EM::RocketIO::Client.new(url, :type => type).connect
   # io = EM::RocketIO::Client.new('http://localhost:5000', :type => :comet).connect
 
-  puts "waiting #{io.url}"
-
   io.on :connect do |session|
     puts "#{io.type} connect!! (sessin_id:#{session})"
   end
