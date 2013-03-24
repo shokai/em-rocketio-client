@@ -1,0 +1,9 @@
+=== 0.0.2 2013-03-25
+
+* use EM::HttpRequest to get settings
+* use comet if websocket port close
+
+=== 0.0.1 2013-03-24
+
+* implement EM::RocketIO::Client
+* add tests

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    em-rocketio-client (0.0.1)
+    em-rocketio-client (0.0.2)
       em-cometio-client
       em-http-request
       em-websocketio-client
@@ -15,7 +15,7 @@ GEM
     backports (3.1.1)
     cookiejar (0.3.0)
     daemons (1.1.9)
-    em-cometio-client (0.0.5)
+    em-cometio-client (0.0.6)
       em-http-request
       event_emitter (>= 0.2.0)
       eventmachine
