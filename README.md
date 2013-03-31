@@ -72,9 +72,15 @@ Test
 
     % gem install bundler
     % bundle install
+
+start server
+
     % export PORT=5000
     % export WS_PORT=8080
-    % export PID_FILE=/tmp/em-rocketio-client-testapp.pid
+    % rake test_server
+
+run test
+
     % rake test
 
 
