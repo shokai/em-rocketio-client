@@ -1,3 +1,7 @@
+=== 0.1.1 2013-04-01
+
+* bugfix for duplicative comet "connect" event
+
 === 0.1.0 2013-04-01
 
 * support Sinatra::RocketIO v0.2.0

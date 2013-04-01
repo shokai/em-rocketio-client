@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    em-rocketio-client (0.1.0)
+    em-rocketio-client (0.1.1)
       em-cometio-client
       em-http-request
       em-websocketio-client
