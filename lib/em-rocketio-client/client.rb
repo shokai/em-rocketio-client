@@ -15,6 +15,10 @@ module EventMachine
         @settings = nil
         @io = nil
         @ws_close_timer = nil
+        on :__connect do
+          io.push :__channel_id, channel
+          emit :connect
+        end
         get_settings
         self
       end
@@ -61,10 +65,6 @@ module EventMachine
           @io.on :* do |event_name, *args|
             event_name = :__connect if event_name == :connect
             this.emit event_name, *args
-          end
-          this.on :__connect do
-            this.io.push :__channel_id, this.channel
-            this.emit :connect
           end
           if @type == :websocket
             @ws_close_timer = EM::add_timer 3 do
