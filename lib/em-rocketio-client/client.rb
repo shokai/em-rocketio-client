@@ -38,7 +38,7 @@ module EventMachine
           if e.error == Errno::ECONNREFUSED
             emit :error, "connection refused (#{url})"
           else
-            emit :error, "#{err.error} (#{url})"
+            emit :error, "#{e.error} (#{url})"
           end
           EM::add_timer 10 do
             get_settings
@@ -88,7 +88,7 @@ module EventMachine
       end
 
       def push(type, data={})
-        @io.push type, data
+        @io.push type, data if @io
       end
 
       def method_missing(name, *args)
