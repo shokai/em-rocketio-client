@@ -20,7 +20,7 @@ require 'em-rocketio-client'
 EM::run do
   io = EM::RocketIO::Client.new('http://localhost:5000').connect
   # io = EM::RocketIO::Client.new('http://localhost:5000', :type => :comet).connect
-
+  # io = EM::RocketIO::Client.new('http://localhost:5000', :channel => '1').connect
   io.on :connect do |session|
     puts "#{io.type} connect!! (sessin_id:#{session})"
   end
