@@ -22,10 +22,10 @@ class TestEmRocketioClient < MiniTest::Unit::TestCase
         end
       end
 
-      client.on :connect do |session|
+      client.on :connect do
         client2 = EM::RocketIO::Client.new(App.url, :type => :comet).connect
-        client2.on :connect do |session2|
-          post_data['to'] = session2
+        client2.on :connect do
+          post_data['to'] = client2.session
           client.push :message, post_data
         end
         client2.on :message do |data|
@@ -66,10 +66,10 @@ class TestEmRocketioClient < MiniTest::Unit::TestCase
         end
       end
 
-      client.on :connect do |session|
+      client.on :connect do
         client2 = EM::RocketIO::Client.new(App.url, :type => :websocket).connect
-        client2.on :connect do |session2|
-          post_data['to'] = session2
+        client2.on :connect do
+          post_data['to'] = client2.session
           client.push :message, post_data
         end
         client2.on :message do |data|
