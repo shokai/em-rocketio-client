@@ -39,17 +39,19 @@ class TestEmRocketioClient < MiniTest::Test
       end
 
       EM::defer do
-        50.times do
+        80.times do
           break if res != nil
           sleep 0.1
         end
-        client.close
+        EM::add_timer 1 do
+          EM::stop
+        end
       end
     end
     assert res2 != nil, 'server not respond'
-    assert res2["time"] == post_data[:time]
-    assert res2["msg"] == post_data[:msg]
-    assert res == nil
+    assert_equal res2["time"], post_data[:time]
+    assert_equal res2["msg"], post_data[:msg]
+    assert_equal res, nil
   end
 
   def test_comet_to_websocket
@@ -83,20 +85,19 @@ class TestEmRocketioClient < MiniTest::Test
       end
 
       EM::defer do
-        50.times do
+        80.times do
           break if res != nil
           sleep 0.1
         end
-        client.close
         EM::add_timer 1 do
           EM::stop
         end
       end
     end
     assert res2 != nil, 'server not respond'
-    assert res2["time"] == post_data[:time]
-    assert res2["msg"] == post_data[:msg]
-    assert res == nil
+    assert_equal res2["time"], post_data[:time]
+    assert_equal res2["msg"], post_data[:msg]
+    assert_equal res, nil
   end
 
 end

@@ -34,11 +34,10 @@ class TestChannel < MiniTest::Test
       end
 
       EM::defer do
-        50.times do
+        80.times do
           break if res != nil and res3 != nil
           sleep 0.1
         end
-        client.close
         EM::stop
       end
     end
