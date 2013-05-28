@@ -1,6 +1,6 @@
 require File.expand_path 'test_helper', File.dirname(__FILE__)
 
-class TestEmRocketioClient < MiniTest::Unit::TestCase
+class TestEmRocketioClient < MiniTest::Test
 
   def test_websocket_to_comet
     ## websocket --> server --> comet
