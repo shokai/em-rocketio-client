@@ -51,10 +51,11 @@ Sample
 
 start [chat server](https://github.com/shokai/rocketio-chat-sample)
 
-    % git clone git://github.com/shokai/rocketio-chat-sample.git
-    % cd rocketio-chat-sample
+    % git clone git://github.com/shokai/sinatra-rocketio.git
+    % cd sinatra-rocketio
     % bundle install
-    % foreman start
+    % cd sample/classic_style
+    % rackup config.ru -p 5000
 
 => http://localhost:5000
 
@@ -64,7 +65,6 @@ sample chat client
     % ruby sample/cui_chat_client.rb
     % ruby sample/cui_chat_client.rb http://localhost:5000 comet
     % ruby sample/cui_chat_client.rb http://localhost:5000 websocket
-    % ruby sample/cui_chat_client.rb http://rocketio-chat.herokuapp.com
 
 
 Test
