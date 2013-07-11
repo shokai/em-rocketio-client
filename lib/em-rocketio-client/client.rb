@@ -7,6 +7,10 @@ module EventMachine
       include EventEmitter
       attr_reader :settings, :type, :io, :channel
 
+      def self.settings
+        @@settings ||= {}
+      end
+
       public
       def initialize(url, opt={:type => :websocket, :channel => nil})
         @url = url
@@ -25,11 +29,17 @@ module EventMachine
 
       private
       def get_settings
+        if self.class.settings[@url].kind_of? Hash
+          @settings = self.class.settings[@url]
+          emit :__settings
+          return
+        end
         url = "#{@url}/rocketio/settings"
         http = EM::HttpRequest.new(url).get
         http.callback do |res|
           begin
             @settings = JSON.parse res.response
+            self.class.settings[@url] = @settings
             emit :__settings
           rescue => e
             emit :error, "#{e} (#{url})"
