@@ -1,3 +1,7 @@
+=== 0.1.2 2013-07-12
+
+* cache /settings
+
 === 0.1.1 2013-04-01
 
 * bugfix for duplicative comet "connect" event
